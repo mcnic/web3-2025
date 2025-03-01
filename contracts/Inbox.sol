@@ -1,4 +1,18 @@
-pragma solidity ^0.4.17;
-// linter warnings (red underline) about pragma version can igonored!
+// SPDX-License-Identifier: UNLICENSED
+pragma solidity ^0.8.0;
 
-// contract code will go here
+contract Inbox {
+    string public message;
+
+    constructor(string memory initialMessage) {
+        message = initialMessage;
+    }
+
+    function setMessage(string memory newMessage) public payable {
+        message = newMessage;
+    }
+
+    // function getMessage() public view returns (string memory) {
+    //     return message;
+    // }
+}
