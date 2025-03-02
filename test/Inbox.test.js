@@ -11,10 +11,13 @@ const bytecode = evm.bytecode.object;
 
 let accounts;
 let inbox;
+let defaultAccount;
+let gasPrice;
+const initialMessage = 'Hi!';
 
 beforeEach(async () => {
   accounts = await web3.eth.getAccounts();
-  const defaultAccount = accounts[0];
+  defaultAccount = accounts[0];
   console.log('defaultAccount:', defaultAccount);
 
   const block = await web3.eth.getBlockNumber();
@@ -24,11 +27,12 @@ beforeEach(async () => {
 
   const contractDeployer = contract.deploy({
     data: bytecode,
-    arguments: ['Hi!'],
+    arguments: [initialMessage],
   });
   console.log('contract deployed');
 
-  const gasPrice = await web3.eth.getGasPrice();
+  gasPrice = await web3.eth.getGasPrice();
+  // gasPrice =  web3.utils.numberToHex(gasPrice)
   console.log(
     'estimated gas price:',
     gasPrice,
@@ -42,7 +46,7 @@ beforeEach(async () => {
   inbox = await contractDeployer.send({
     from: defaultAccount,
     gas: '1000000',
-    gasPrice: web3.utils.numberToHex(gasPrice),
+    gasPrice,
   });
   console.log('Contract deployed at address: ' + inbox.options.address);
 });
@@ -50,5 +54,22 @@ beforeEach(async () => {
 describe('Inbox', () => {
   it('deploys a contract', () => {
     console.log({ inbox });
+    assert.ok(inbox.options.address);
+  });
+
+  it('has a default message', async () => {
+    const messaage = await inbox._methods.message().call();
+    assert.equal(messaage, initialMessage);
+  });
+
+  it('set message', async () => {
+    await inbox._methods.setMessage('new message').send({
+      from: defaultAccount,
+      gasPrice,
+      gas: 1000000,
+    });
+
+    const messaage = await inbox._methods.message().call();
+    assert.equal(messaage, 'new message');
   });
 });
