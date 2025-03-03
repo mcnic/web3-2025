@@ -3,7 +3,7 @@ const output = require('./compile');
 const { getMessage } = require('./inbox.methods');
 
 const { abi, evm } = output;
-const endpointUrl = urls.sopolia;
+const endpointUrl = urls.sepolia;
 const mnemonic = process.env.MNENONIC;
 let walletAddress = '0x87FACa430E7DE6d1DDEb16d2e49D1dF2fA80b838';
 const { web3, provider } = getClientFromMnemonic(mnemonic, endpointUrl);

@@ -2,7 +2,7 @@ const HDWalletProvider = require('@truffle/hdwallet-provider');
 const { Web3 } = require('web3');
 
 const urls = {
-  sopolia:
+  sepolia:
     'https://eth-sepolia.g.alchemy.com/v2/WddzdzI2o9S3COdT73d5w6AIogbKq4X-',
 };
 const getClient = (endpointUrl) => {
